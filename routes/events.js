@@ -44,7 +44,19 @@ router.get(['/', '/events'], async (req, res, next) => {
 
     // TODO 1. Sustituye [] por el resultado de la consulta a Event.
     // Filtra por fecha con $gte y ordena por fecha ascendente con sort().
-    const events = [];
+
+
+    const events = await Event.find({
+      date: { $gte: today }
+    })
+      .sort({ date: 1 })
+      .populate();
+
+    res.json(events);
+
+  } catch (err) {
+    next(err);
+  }
 
     // Espera a que estén preparados los datos de todas las tarjetas.
     const eventsWithAvailability = await Promise.all(
